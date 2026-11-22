@@ -688,6 +688,37 @@
 
   let mockOpen = false;
 
+  /* 3月の回（2027年第2回）に向けた土日中心の段取り */
+  const PLAN = {
+    exam: '2027-2',
+    steps: [
+      { to: '2026-12-31', name: '基礎固め', todo: 'テキスト第2版の4〜6章（DLの概要・要素技術・応用例）を1周。アプリは卒業モード。本の問題の写真を少しずつClaudeへ' },
+      { to: '2027-01-31', name: '演習', todo: '本の問題とアプリの「苦手な問題」を回す。解いたら印刷用の「入れる／入れない」を付ける。1月22日から受験申し込み' },
+      { to: '2027-02-14', name: '模試', todo: '模擬テスト145問（100分）で8割を目指す。終わったら「印刷用カンペ」から書き出してClaudeへ' },
+      { to: '2027-03-04', name: '仕上げ', todo: 'Claudeが作った印刷用を印刷し、横に置いて模擬テストを1回。引きやすさを確かめて直す' },
+      { to: '2027-03-06', name: '本番', todo: '3月5日・6日。8割に届かなければ、2日前までに5月の回へ移せる' },
+    ],
+  };
+
+  function planBlock() {
+    if (examPref().id !== PLAN.exam) return '';
+    const today = dayKey(now());
+    let cur = PLAN.steps.findIndex((st) => today <= st.to);
+    if (cur < 0) return '';
+    const fmt = (d) => `${Number(d.slice(5, 7))}/${Number(d.slice(8, 10))}`;
+    let from = null;
+    const rows = PLAN.steps.map((st, i) => {
+      const range = `${from ? fmt(from) + '〜' : '〜'}${fmt(st.to)}`;
+      const d = new Date(st.to + 'T00:00:00'); d.setDate(d.getDate() + 1);
+      from = dayKey(d.getTime());
+      return `<li class="${i === cur ? 'now' : i < cur ? 'done' : ''}"><b>${st.name}</b><span class="muted num">${range}</span><p>${st.todo}</p></li>`;
+    }).join('');
+    return `<details class="plan">
+        <summary><span>いまは「${PLAN.steps[cur].name}」</span><span class="muted">${PLAN.steps[cur].todo.split('。')[0]}</span></summary>
+        <ol>${rows}</ol>
+      </details>`;
+  }
+
   function renderHome() {
     const cnt = { m: pool('m').length, u: pool('u').length, w: pool('w').length, f: pool('f').length, r: pool('r').length, k: pool('k').length };
     const take = (n) => (settings.count === 0 ? n : Math.min(settings.count, n));
@@ -709,6 +740,7 @@
         <button class="sync-chip" data-act="nav" data-to="settings" aria-label="同期の設定"></button>
       </header>
       ${examBlock()}
+      ${planBlock()}
       ${resume}
       ${mapBlock()}
       <button class="btn primary block start-main" data-act="start" data-mode="m" ${cnt.m ? '' : 'disabled'}>
