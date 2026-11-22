@@ -6,6 +6,7 @@
 """
 import hashlib
 import json
+import re
 import random
 import sys
 from collections import Counter
@@ -14,6 +15,23 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "data" / "src"
 OUT = ROOT / "data" / "questions.json"
+
+
+# 印刷用カンペの「おすすめ」の目安。問題に "k": 0/1 があればそれを優先する。
+# 歴史・法律・倫理（人名・年・法令・ガイドライン名）と、用語や数値を答える問題をおすすめにする。
+# 「説明として最も適切なもの」のような理解を問う問題は、カンペを引くより理解で解くほうが速いので外す。
+LOOKUP_CATS = {"c01", "c02", "c09", "c10"}
+LOOKUP_Q = re.compile(r"(何と呼ぶか|誰か|いくつか|いくらか|何行何列|名称|はどれか。$)")
+CONCEPT_Q = re.compile(r"(説明として|特徴として|として、最も|ものはどれか)")
+
+
+def kanpe_hint(cat_id: str, item: dict) -> int:
+    if "k" in item:
+        return 1 if item["k"] else 0
+    if cat_id in LOOKUP_CATS:
+        return 1
+    q = item["q"]
+    return 1 if LOOKUP_Q.search(q) and not CONCEPT_Q.search(q) else 0
 
 
 def main() -> int:
@@ -55,6 +73,7 @@ def main() -> int:
                 "c": new_choices,
                 "a": order.index(a),
                 "e": item["e"],
+                "k": kanpe_hint(cat_id, item),
             })
 
     if errors:
@@ -71,6 +90,7 @@ def main() -> int:
     for cid in sorted(per_cat):
         print(f"{cid} {names[cid]}: {per_cat[cid]}問")
     print(f"合計 {len(questions)}問 / version {digest}")
+    print("印刷用おすすめ:", sum(q["k"] for q in questions), "問")
     print("正解の位置の分布:", dict(sorted(Counter(q['a'] for q in questions).items())))
     return 0
 

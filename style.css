@@ -430,6 +430,7 @@ a.btn, a.icon-btn { color: var(--ink); }
 
 .footer-nav {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 6px;
   margin-top: 30px;
@@ -769,3 +770,91 @@ ol.steps li + li { margin-top: 6px; }
   #app { padding-top: 32px; }
   .qtext { font-size: 18px; }
 }
+
+/* ---------- 印刷用カンペ ---------- */
+
+.srctag {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 7px;
+  border-radius: 6px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.7;
+  vertical-align: 1px;
+}
+
+.kp {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.kp-row, .krow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.kp-lab { font-size: 14px; font-weight: 700; }
+.kp-seg { flex: 0 1 200px; }
+.kp-seg button { min-height: 38px; padding: 6px 4px; font-size: 14px; }
+.kp-hint { margin-top: 6px; font-size: 13px; color: var(--muted); }
+.kp-note-lab { display: block; margin-top: 10px; font-size: 13px; color: var(--muted); }
+
+.kp-note {
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.rdetail .kp { margin-left: 0; }
+
+.kp-actions .btn + .btn { margin-top: 8px; }
+
+.kcat {
+  margin-bottom: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.kcat summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.kcat summary::-webkit-details-marker { display: none; }
+.kcat summary .muted { font-weight: 400; font-size: 13px; white-space: nowrap; }
+.kcat[open] summary { border-bottom: 1px solid var(--line); }
+
+.klist { list-style: none; margin: 0; padding: 0 14px; }
+.kitem { padding: 12px 0; border-bottom: 1px solid var(--line); }
+.kitem:last-child { border-bottom: 0; }
+.kitem[data-in="1"] { box-shadow: inset 3px 0 0 var(--st-almost); padding-left: 10px; margin-left: -10px; }
+.kq { font-size: 14.5px; }
+.ka { margin-top: 4px; font-size: 14px; }
+.ka b { color: var(--ok); }
+.ka .muted { font-size: 12.5px; margin-left: 4px; }
+.kmemo { margin-top: 4px; font-size: 13.5px; color: var(--warn); }
+.krow { margin-top: 8px; }
+.kstate { font-size: 13px; color: var(--muted); }
+

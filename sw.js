@@ -1,6 +1,6 @@
 // 電波のない場所でも開けるようにするためのサービスワーカー。
 // 同じサイトのファイルは「まずネット、だめならキャッシュ」なので、更新はすぐ反映される。
-const CACHE = 'g-kentei-drill-v1';
+const CACHE = 'g-kentei-drill-v2';
 const SHELL = [
   './',
   './index.html',
